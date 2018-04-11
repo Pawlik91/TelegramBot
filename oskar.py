@@ -8,6 +8,9 @@ import configparser
 import bs4
 from googletrans import Translator
 
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 
 def youtubeCrawler(searchTerm):
     text = requests.get('https://www.youtube.com/results?search_query='+searchTerm).text
@@ -29,37 +32,34 @@ def handle(msg):
     userName = msg['chat']['first_name']
 
     command = msg['text']
-    translatedCommand = translator.translate(command).text
+    translatedCommand = translator.translate(command)
+    sourceLanguage = translatedCommand.src
+    operatingLanguage = 'en'
 
-    # response = requests.post(config['Default']['URL'], data=translatedCommand)
+    #response = requests.post(config['Default']['URL'], data=translatedCommand.text)
 
     print 'got command \"%s\" from user \"%s\"' % (command, userName)
-    print 'translated into english: %s' % translatedCommand
+    print 'translated into english: %s' % translatedCommand.text
+
+    greetingMessage = 'Hi ' + userName + ', I am happy to hear from you!'
+    startShoppingMessage = 'Then let\'s have a look what Otto can offer for you!'
 
     for keyword in keywords:
-        if keyword in translatedCommand:
-            bot.sendMessage(chat_id, str('Dann sehen wir mal, was Otto so im Angebot hat!'))
+        if keyword in translatedCommand.text:
+            bot.sendMessage(chat_id, translator.translate(startShoppingMessage, src=operatingLanguage, dest=sourceLanguage).text)
             break
         if 'video' in translatedCommand:
             bot.sendMessage(chat_id, str( youtubeCrawler('Otto.de') ))
             break
 
     else: 
-       bot.sendMessage(chat_id, str('Hallo ' + userName + ', ich freue mich, von dir zu hoeren!'))
-
+       bot.sendMessage(chat_id, translator.translate(greetingMessage, src=operatingLanguage, dest=sourceLanguage).text)
 
 
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-# Set DEVELOPER_KEY to the API key value from the APIs & auth > Registered apps
-# tab of
-#   https://cloud.google.com/console
-# Please ensure that you have enabled the YouTube Data API for your project.
-DEVELOPER_KEY = config['Google']['YouTube']
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
 
 keywords = ['shop', 'buy']
 translator = Translator()    
