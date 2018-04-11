@@ -14,5 +14,5 @@ def handle(msg):
         bot.sendMessage(chat_id, str('Dann sehen wir mal, was Otto so im Angebot hat!'))
 
 
-bot = teleport.Bot('509164385:AAE0_pOzH6fTPIWO7jc1zm1-08lbKqd55kM')
+bot = telepot.Bot('509164385:AAE0_pOzH6fTPIWO7jc1zm1-08lbKqd55kM')
 bot.message_loop(handle)
