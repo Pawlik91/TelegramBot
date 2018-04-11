@@ -16,7 +16,8 @@ def handle(msg):
     userName = msg['chat']['first_name']
 
     command = msg['text']
-    translatedCommand = translator.translate(command).text
+    translatedCommand = translator.translate(command)
+    print translatedCommand
 
 
     print 'got command \"%s\" from user \"%s\"' % (command, userName)
