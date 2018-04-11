@@ -7,6 +7,9 @@ import requests
 import configparser
 from googletrans import Translator
 
+reload(sys)
+sys.setdefaultencoding('utf8')
+
 
 def handle(msg):
 
@@ -15,23 +18,27 @@ def handle(msg):
 
     command = msg['text']
     translatedCommand = translator.translate(command)
-    print translatedCommand
+    sourceLanguage = translatedCommand.src
+    operatingLanguage = 'en'
 
-    response = requests.post(config['Default']['URL'], data=translatedCommand)
+    #response = requests.post(config['Default']['URL'], data=translatedCommand.text)
 
     print 'got command \"%s\" from user \"%s\"' % (command, userName)
-    print 'translated into english: %s' % translatedCommand
+    print 'translated into english: %s' % translatedCommand.text
+
+    greetingMessage = 'Hi ' + userName + ', I am happy to hear from you!'
+    startShoppingMessage = 'Then let\'s have a look what Otto can offer for you!'
 
     for keyword in keywords:
-        if keyword in translatedCommand:
-            bot.sendMessage(chat_id, str('Dann sehen wir mal, was Otto so im Angebot hat!'))
+        if keyword in translatedCommand.text:
+            bot.sendMessage(chat_id, translator.translate(startShoppingMessage, src=operatingLanguage, dest=sourceLanguage).text)
             break
     else: 
-       bot.sendMessage(chat_id, str('Hallo ' + userName + ', ich freue mich, von dir zu hoeren!'))
+       bot.sendMessage(chat_id, translator.translate(greetingMessage, src=operatingLanguage, dest=sourceLanguage).text)
 
 
 keywords = ['shop', 'buy']
-translator = Translator()    
+translator = Translator()
 
 config = configparser.ConfigParser()
 config.read('config.ini')
