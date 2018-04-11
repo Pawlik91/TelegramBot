@@ -3,14 +3,34 @@ import time
 import random
 import datetime
 import telepot
-import telegram
+import requests
+import configparser
+from google.cloud import translate
+from google.auth import app_engine
+    import googleapiclient.discovery
 
 def handle(msg):
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    googleCredentials = config['Google']['Credentials']
+
     chat_id = msg['chat']['id']
     userName = msg['chat']['first_name']
 
-    #user = telegram.user()
     command = msg['text']
+
+    translate_client = translate.Client()
+    result = translate_client.detect_language(command)
+
+
+    print 'Text: %s' % command
+    print 'Confidence: %s' % result['confidence'] 
+    print 'Language: %s' % result['language']
+
+    bot.sendMessage(chat_id, 'Language: %s' % result['language'] )
+    bot.sendMessage(chat_id, 'Confidence: %s' % result['confidence'] )
+
+    #user = telegram.user()
 
     print 'got command : %s' % command
     print 'from user: ' + userName
@@ -21,7 +41,7 @@ def handle(msg):
        bot.sendMessage(chat_id, str('Hallo ' + userName + ', ich freue mich, von dir zu hoeren!'))
 
 
-bot = telepot.Bot('509164385:AAE0_pOzH6fTPIWO7jc1zm1-08lbKqd55kM')
+bot = telepot.Bot('573809489:AAHAwbrgWU6wePwXOq1aGqd5Ot5xHE1276M')
 bot.message_loop(handle)
 
 print 'Listening'
