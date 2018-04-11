@@ -8,8 +8,8 @@ import configparser
 import bs4
 from googletrans import Translator
 
-reload(sys)
-sys.setdefaultencoding('utf8')
+# reload(sys)
+# sys.setdefaultencoding('utf8')
 
 
 def youtubeCrawler(searchTerm):
@@ -38,8 +38,8 @@ def handle(msg):
 
     #response = requests.post(config['Default']['URL'], data=translatedCommand.text)
 
-    print 'got command \"%s\" from user \"%s\"' % (command, userName)
-    print 'translated into english: %s' % translatedCommand.text
+    print ('got command \"%s\" from user \"%s\"'.format(command, userName))
+    print ('translated into english: %s'.format(translatedCommand.text))
 
     greetingMessage = 'Hi ' + userName + ', I am happy to hear from you!'
     startShoppingMessage = 'Then let\'s have a look what Otto can offer for you!'
@@ -48,7 +48,7 @@ def handle(msg):
         if keyword in translatedCommand.text:
             bot.sendMessage(chat_id, translator.translate(startShoppingMessage, src=operatingLanguage, dest=sourceLanguage).text)
             break
-        if 'video' in translatedCommand:
+        if 'video' in translatedCommand.text:
             bot.sendMessage(chat_id, str( youtubeCrawler('Otto.de') ))
             break
 
@@ -70,7 +70,7 @@ bot = telepot.Bot(config['Bot']['token'])
 bot.message_loop(handle)
 
 
-print 'Listening'
+print ('Listening')
 
 
 while 1:
