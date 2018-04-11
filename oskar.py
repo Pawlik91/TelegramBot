@@ -19,15 +19,8 @@ def handle(msg):
     translatedCommand = translator.translate(command).text
 
 
-    print 'got command: %s' % command
-    #print 'Confidence: %s' % result['confidence'] 
-    print 'translated text : %s' % translatedCommand
-
-    #bot.sendMessage(chat_id, 'Language: %s' % result['language'] )
-    #bot.sendMessage(chat_id, 'Confidence: %s' % result['confidence'] )
-
-    #print 'got command : %s' % command
-    print 'from user: ' + userName
+    print 'got command \"%s\" from user \"%s\"' % (command, userName)
+    print 'translated into english: %s' % translatedCommand
 
     for keyword in keywords:
         if keyword in command:
