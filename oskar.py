@@ -75,7 +75,7 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
         categories = []
         # Nach Kategorie im Tree suchen
         for word in corpus:
-            if tree.isPartOfTree(word):
+            if NTree.isPartOfTree(word):
                 categories.append(word)
 
         # Gefundene Kategorien aus Korpus löschen
@@ -150,7 +150,7 @@ bot = telepot.aio.DelegatorBot(config['Bot']['token']  , [
         per_chat_id(), create_open, MessageCounter, timeout=10),
 ])
 
-tree = NTree.initTree()
+NTree.initTree()
 
 loop = asyncio.get_event_loop()
 loop.create_task(MessageLoop(bot).run_forever())

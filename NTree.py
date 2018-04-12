@@ -39,6 +39,6 @@ def getTree():
     return nodes
 
 def isPartOfTree(key):
-    if key in d:
+    if key in nodes:
         return True
     return False
