@@ -43,10 +43,3 @@ def getUserContent(uniqueID):
     crs.close()
     db_con.close()
     return fetchUser    
-
-addToDB('Lena','123456', 'F', '112', '38', 'S')
-addToDB('Lena','123477', 'F', '112', '38', 'S')
-print ('---------')
-print (getFullContent())
-print ('---------')
-print (getUserContent('123456'))
