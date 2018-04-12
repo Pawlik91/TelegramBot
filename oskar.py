@@ -10,6 +10,7 @@ from telepot.aio.delegate import per_chat_id, create_open, pave_event_space
 import productAPI
 import nltk
 import random
+import NTree
 
 class MessageCounter(telepot.aio.helper.ChatHandler): 
 
@@ -20,6 +21,9 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
     async def on_chat_message(self, msg):
         chat_id = msg['message_id']
         userName = msg['from']['first_name']
+
+        # if(db.userInDB(chat_id) == False):
+        #     print('t')
 
         command = msg['text']
         translatedCommand = translator.translate(command)
@@ -68,9 +72,15 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
         corpus=[token for token in words if token not in stopwords]
         # Im Corpus liegen jetzt nur noch Kategorieren, Marken und Produkte        
 
+        categories = []
         # Nach Kategorie im Tree suchen
+        for word in corpus:
+            if tree.isPartOfTree(word):
+                categories.append(word)
 
-        # Gefundene Kategorien löschen
+        # Gefundene Kategorien aus Korpus löschen
+        corpus=[token for token in words if token not in categories]
+
         # Übrig sollten nur noch Brands und Produkte sein
         jokes = ["Ich soll einen Witz erzählen? \n Ich kenne keine Witze du Otto!", "Alle Kinder haben eine Devise, nur nicht Otto, der hat ein Motto.", "Schachmatt", "Ey, du Otto!"]
 
@@ -122,6 +132,8 @@ bot = telepot.aio.DelegatorBot(config['Bot']['token']  , [
     pave_event_space()(
         per_chat_id(), create_open, MessageCounter, timeout=10),
 ])
+
+tree = NTree.initTree()
 
 loop = asyncio.get_event_loop()
 loop.create_task(MessageLoop(bot).run_forever())

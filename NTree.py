@@ -37,3 +37,8 @@ def initTree():
 def getTree():
     initTree()
     return nodes
+
+def isPartOfTree(key):
+    if key in d:
+        return True
+    return False
