@@ -7,7 +7,7 @@ def createDB():
     db_connection = db.connect(host='10.1.141.234', port=3306, user='oskar', password='', database='oskar')
     cursor = db_connection.cursor()
     cursor.execute("DROP TABLE userData")
-    cursor.execute("CREATE TABLE IF NOT EXISTS userData(userName TEXT, gender INT, age INT")
+    cursor.execute("CREATE TABLE IF NOT EXISTS userData(userName TEXT, gender INT, age INT)")
     db_con = db_connection
     crs = cursor
     return cursor, db_connection

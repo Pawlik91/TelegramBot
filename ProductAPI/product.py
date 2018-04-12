@@ -13,3 +13,9 @@ class Product:
     categoryPaths = []
     categoryAssortment  = ''
     color = ''
+
+    def toString(self):
+        val = "brand: " + self.brand + ", name: " + self.name + ", color: ", self.color, ", price " \
+        + str(self.price) + ", sale: " + str(self.sale) + ", assortment: " + self.categoryAssortment \
+        + ", articleNo: " + str(self.articleNo)
+        return val

@@ -120,8 +120,22 @@ def getAllProducts(brand='', name='', priceFrom='', priceTo='', sale=False, avai
 
     return products
 
+def filterProductsByCategoryAssortment(products, assortment):
+    filtered = []
+    for i in range(0, len(products)):
+        if(products[i].categoryAssortment == assortment):
+            filtered.append(products[i])
+    return filtered
 
-products = getAllProducts(brand = "LG", name = "TV")
-print len(products)
+def filterProductsByCategoryPath(products, path):
+    filtered = []
+    for i in range(0, len(products)):
+        paths = products[i].categoryPaths
+        for j in range(0, len(paths)):
+            if path in paths[j]:
+                filtered.append(products[i])
+                break
+        
+    return filtered
 
-print products[4].name
+
