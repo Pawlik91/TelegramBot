@@ -12,12 +12,9 @@ def connectToDB():
 def addToDB(userName, uniqueID, gender, age, shoeSize, clothSize):
     crs, db_con = connectToDB()
 
-    crs.execute("SELECT uniqueID, COUNT(*) FROM userData WHERE uniqueID = " + str(uniqueID) + " GROUP BY uniqueID")
-    list_of_ids = list(itertools.chain.from_iterable(crs))
-    print(list_of_ids)
-    if len(list_of_ids) != 0:
-        print ('user already exists')
+    if userInDB(crs, uniqueID) == True:
         return
+    
     sql = "insert into userData VALUES('%s', '%s', '%s', '%s', '%s', '%s')" % \
        (userName, uniqueID, gender, age, shoeSize, clothSize)
     print ('add new user to database with data (userName, uniqueID, gender, age, shoeSize, clothSize) = ' ,userName, uniqueID, gender, age, shoeSize, clothSize)
@@ -25,6 +22,26 @@ def addToDB(userName, uniqueID, gender, age, shoeSize, clothSize):
     db_con.commit()
     crs.close()
     db_con.close()
+
+def userInDB(crs, uniqueID):
+    crs, db_con = connectToDB()
+    crs.execute("SELECT uniqueID, COUNT(*) FROM userData WHERE uniqueID = " + str(uniqueID) + " GROUP BY uniqueID")
+    list_of_ids = list(itertools.chain.from_iterable(crs))
+    if len(list_of_ids) != 0:
+        print ('user already exists')
+        return True
+    return False
+
+def userInDB(uniqueID):
+    crs.execute("SELECT uniqueID, COUNT(*) FROM userData WHERE uniqueID = " + str(uniqueID) + " GROUP BY uniqueID")
+    list_of_ids = list(itertools.chain.from_iterable(crs))
+    inDb = False
+    if len(list_of_ids) != 0:
+        print ('user already exists')
+        inDb = True
+    crs.close()
+    db_con.close()
+    return inDb
 
 def getFullContent():
     crs, db_con = connectToDB()

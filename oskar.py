@@ -8,6 +8,8 @@ from googletrans import Translator
 from telepot.aio.loop import MessageLoop
 from telepot.aio.delegate import per_chat_id, create_open, pave_event_space
 import productAPI
+import database as db
+#import /NTree/NTree
 
 class MessageCounter(telepot.aio.helper.ChatHandler): 
 
@@ -18,6 +20,9 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
     async def on_chat_message(self, msg):
         chat_id = msg['message_id']
         userName = msg['from']['first_name']
+
+        if(db.userInDB(chat_id) == False):
+            print('t')
 
         command = msg['text']
         translatedCommand = translator.translate(command)
