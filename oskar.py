@@ -83,7 +83,8 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
 
         # Übrig sollten nur noch Brands und Produkte sein
         jokes = ["Ich soll einen Witz erzählen? \n Ich kenne keine Witze du Otto!", "Alle Kinder haben eine Devise, nur nicht Otto, der hat ein Motto.", "Schachmatt", "Ey, du Otto!"]
-
+        springSummerTrends = "Spring and summer trends 2018 will be nothing but bright, bold and beautiful. Top Five trends are polka dots, pastels, fringe, asymmetry and checks. Looking forward to seeing you dressed that way!"
+        autumnWinterTrends = "How should I now? I am quite intelligent, but no fortune teller. Let\'s wait and see!"
 
         for keyword in keywords:
             if keyword in corpus:
@@ -99,6 +100,22 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
             elif 'joke' in corpus:
                 result = jokes[random.randrange(0, len(jokes)-1)]
                 break
+            elif 'trend' in corpus:
+                if 'winter' in corpus:
+                    result = autumnWinterTrends
+                    break
+                elif 'autumn' in corpus:
+                    result = autumnWinterTrends
+                    break
+                elif 'spring' in corpus:
+                    result = springSummerTrends
+                    break
+                elif 'summer' in corpus:
+                    result = springSummerTrends
+                    break
+                result = springSummerTrends
+                break
+
         else: 
             result = (translator.translate(greetingMessage, src=operatingLanguage, dest=sourceLanguage).text)
 
