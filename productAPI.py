@@ -27,7 +27,7 @@ def appendPage(url, pageNo):
     return url
         
 def getDataFromURL(url):
-    response = urllib.urlopen(url)
+    response = urllib.request.urlopen(url)
     data = json.loads(response.read())
     return data
 
@@ -121,7 +121,7 @@ def getAllProducts(brand='', name='', priceFrom='', priceTo='', sale=False, avai
     return products
 
 
-products = getAllProducts(brand = "LG", name = "TV")
-print len(products)
+# products = getAllProducts(brand = "LG", name = "TV")
+# print len(products)
 
-print products[4].name
+# print products[4].name
