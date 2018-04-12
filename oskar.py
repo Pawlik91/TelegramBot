@@ -8,10 +8,6 @@ import configparser
 import bs4
 from googletrans import Translator
 
-# reload(sys)
-# sys.setdefaultencoding('utf8')
-
-
 def youtubeCrawler(searchTerm):
     text = requests.get('https://www.youtube.com/results?search_query='+searchTerm).text
     soup = bs4.BeautifulSoup(text, "html.parser")
