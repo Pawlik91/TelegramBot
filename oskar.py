@@ -51,13 +51,13 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
                         range.append(words[i+1])
                         break
         
-
         if (len(range)>1):
             priceFrom = range[0]
             priceTo = range[1]
         elif (len(range)==1):
             priceTo = range[0]
         
+        #ToDo: Wenn ein wort in Tree ist -> neue Kategorie 
 
         for keyword in keywords:
             if keyword in translatedCommand.text:
