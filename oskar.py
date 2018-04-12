@@ -8,10 +8,6 @@ import configparser
 import bs4
 from googletrans import Translator
 
-reload(sys)
-sys.setdefaultencoding('utf8')
-
-
 def youtubeCrawler(searchTerm):
     text = requests.get('https://www.youtube.com/results?search_query='+searchTerm).text
     soup = bs4.BeautifulSoup(text, "html.parser")
@@ -38,8 +34,8 @@ def handle(msg):
 
     #response = requests.post(config['Default']['URL'], data=translatedCommand.text)
 
-    print 'got command \"%s\" from user \"%s\"' % (command, userName)
-    print 'translated into english: %s' % translatedCommand.text
+    print ('got command \"%s\" from user \"%s\"' % (command, userName))
+    print ('translated into english: %s' % translatedCommand.text)
 
     greetingMessage = 'Hi ' + userName + ', I am happy to hear from you!'
     startShoppingMessage = 'Then let\'s have a look what Otto can offer for you!'
@@ -66,11 +62,7 @@ translator = Translator()
 #youtube = youtube.YouTube(api_key=config['Google']['YouTube'])
 
 
-bot = telepot.Bot(config['Bot']['token'])
-bot.message_loop(handle)
-
-
-print 'Listening'
+print ('Listening')
 
 
 while 1:
