@@ -6,6 +6,7 @@ import telepot
 import requests
 import configparser
 import bs4
+import telepot.aio
 from googletrans import Translator
 
 class MessageCounter(telepot.aio.helper.ChatHandler): 
@@ -39,7 +40,7 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
 
         for wordCombination in wordCombinationList:
             if all(word in words for word in wordCombination):
-                for i in range(0, len(words))
+                for i in range(0, len(words)):
                     if ("-" == words[i]):
                         range.append(words[i-1])      
                         range.append(words[i+1])
