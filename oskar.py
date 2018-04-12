@@ -8,6 +8,8 @@ from googletrans import Translator
 from telepot.aio.loop import MessageLoop
 from telepot.aio.delegate import per_chat_id, create_open, pave_event_space
 import productAPI
+import nltk
+import random
 
 class MessageCounter(telepot.aio.helper.ChatHandler): 
 
@@ -51,6 +53,7 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
                     elif ( wordCombination[0] == words[i]) or (wordCombination[1] == words[i] ):
                         range.append(words[i+1])
                         break
+
         
         if (len(range)>1):
             priceFrom = range[0]
@@ -58,18 +61,33 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
         elif (len(range)==1):
             priceTo = range[0]
         
+
         #ToDo: Wenn ein wort in Tree ist -> neue Kategorie 
+        stopwords = [ "a", "about", "above", "above", "across", "after", "afterwards", "again", "against", "all", "almost", "alone", "along", "already", "also","although","always","am","among", "amongst", "amoungst", "amount",  "an", "and", "another", "any","anyhow","anyone","anything","anyway", "anywhere", "are", "around", "as",  "at", "back","be","became", "because","become","becomes", "becoming", "been", "before", "beforehand", "behind", "being", "below", "beside", "besides", "between", "beyond", "bill", "both", "bottom","but", "by", "call", "can", "cannot", "cant", "co", "con", "could", "couldnt", "cry", "de", "describe", "detail", "do", "done", "down", "due", "during", "each", "eg", "eight", "either", "eleven","else", "elsewhere", "empty", "enough", "etc", "even", "ever", "every", "everyone", "everything", "everywhere", "except", "few", "fifteen", "fify", "fill", "find", "fire", "first", "five", "for", "former", "formerly", "forty", "found", "four", "from", "front", "full", "further", "get", "give", "go", "had", "has", "hasnt", "have", "he", "hence", "her", "here", "hereafter", "hereby", "herein", "hereupon", "hers", "herself", "him", "himself", "his", "how", "however", "hundred", "ie", "if", "in", "inc", "indeed", "interest", "into", "is", "it", "its", "itself", "keep", "last", "latter", "latterly", "least", "less", "ltd", "made", "many", "may", "me", "meanwhile", "might", "mill", "mine", "more", "moreover", "most", "mostly", "move", "much", "must", "my", "myself", "name", "namely", "neither", "never", "nevertheless", "next", "nine", "no", "nobody", "none", "noone", "nor", "not", "nothing", "now", "nowhere", "of", "off", "often", "on", "once", "one", "only", "onto", "or", "other", "others", "otherwise", "our", "ours", "ourselves", "out", "over", "own","part", "per", "perhaps", "please", "put", "rather", "re", "same", "see", "seem", "seemed", "seeming", "seems", "serious", "several", "she", "should", "show", "side", "since", "sincere", "six", "sixty", "so", "some", "somehow", "someone", "something", "sometime", "sometimes", "somewhere", "still", "such", "system", "take", "ten", "than", "that", "the", "their", "them", "themselves", "then", "thence", "there", "thereafter", "thereby", "therefore", "therein", "thereupon", "these", "they", "thickv", "thin", "third", "this", "those", "though", "three", "through", "throughout", "thru", "thus", "to", "together", "too", "top", "toward", "towards", "twelve", "twenty", "two", "un", "under", "until", "up", "upon", "us", "very", "via", "was", "we", "well", "were", "what", "whatever", "when", "whence", "whenever", "where", "whereafter", "whereas", "whereby", "wherein", "whereupon", "wherever", "whether", "which", "while", "whither", "who", "whoever", "whole", "whom", "whose", "why", "will", "with", "within", "without", "would", "yet", "you", "your", "yours", "yourself", "yourselves", "the" ]
+
+        corpus=[token for token in words if token not in stopwords]
+        # Im Corpus liegen jetzt nur noch Kategorieren, Marken und Produkte        
+
+        # Nach Kategorie im Tree suchen
+
+        # Gefundene Kategorien löschen
+        # Übrig sollten nur noch Brands und Produkte sein
+        jokes = ["Ich soll einen Witz erzählen? \n Ich kenne keine Witze du Otto!", "Alle Kinder haben eine Devise, nur nicht Otto, der hat ein Motto.", "Schachmatt", "Ey, du Otto!"]
+
 
         for keyword in keywords:
-            if keyword in translatedCommand.text:
+            if keyword in corpus:
                 result = ( translator.translate(startShoppingMessage, src=operatingLanguage, dest=sourceLanguage).text)
                 break
-            elif 'video' in translatedCommand.text:
+            elif 'video' in corpus:
                 result = ( str( self.youtubeCrawler('Otto.de') ))
                 break
-            elif 'list' in translatedCommand.text:
-                result = productAPI.getAllProducts(brand = "LG", name = "TV", priceFrom = '30000', priceTo = '50000')
+            elif 'list' in corpus:
+                result = productAPI.getAllProducts(brand = "LG", name = "TV", priceFrom = priceFrom, priceTo = priceTo)
                 result = result[0].name
+                break
+            elif 'joke' in corpus:
+                result = jokes[random.randrange(0, len(jokes)-1)]
                 break
         else: 
             result = (translator.translate(greetingMessage, src=operatingLanguage, dest=sourceLanguage).text)
@@ -97,11 +115,8 @@ class MessageCounter(telepot.aio.helper.ChatHandler):
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-
 keywords = ['shop', 'buy']
 translator = Translator()    
-#youtube = youtube.YouTube(api_key=config['Google']['YouTube'])
-
 
 bot = telepot.aio.DelegatorBot(config['Bot']['token']  , [
     pave_event_space()(
